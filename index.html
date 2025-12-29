@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora Nova Era</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #252525;
+            padding: 30px;
+            border-radius: 25px;
+            border: 3px solid #e63946;
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+        }
+        h1 { color: #e63946; font-size: 1.5rem; margin-bottom: 20px; }
+        .valor-principal { font-size: 2rem; font-weight: bold; margin-bottom: 20px; color: #fff; }
+        .linha {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+        .vermelho { color: #e63946; font-weight: bold; }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0 10px;
+            border-radius: 10px;
+            border: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .btn-group { display: flex; gap: 10px; }
+        button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn-calc { background: #e63946; color: white; }
+        .btn-zero { background: white; color: #1a1a1a; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🐺 NOVA ERA 🐺</h1>
+    <div id="total" class="valor-principal">R$ 0,00</div>
+    
+    <div class="linha">
+        <span>Cliente (85%)</span>
+        <span id="cliente" class="vermelho">R$ 0,00</span>
+    </div>
+    <div class="linha">
+        <span>Depósito (15%)</span>
+        <span id="deposito" class="vermelho">R$ 0,00</span>
+    </div>
+
+    <input type="number" id="entrada" placeholder="Digite o valor da venda">
+    
+    <div class="btn-group">
+        <button class="btn-calc" onclick="calcular()">Calcular</button>
+        <button class="btn-zero" onclick="limpar()">Zerar</button>
+    </div>
+</div>
+
+<script>
+    function formatar(n) {
+        return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function calcular() {
+        let v = parseFloat(document.getElementById('entrada').value) || 0;
+        document.getElementById('total').innerText = formatar(v);
+        document.getElementById('cliente').innerText = formatar(v * 0.85);
+        document.getElementById('deposito').innerText = formatar(v * 0.15);
+    }
+
+    function limpar() {
+        document.getElementById('entrada').value = '';
+        document.getElementById('total').innerText = 'R$ 0,00';
+        document.getElementById('cliente').innerText = 'R$ 0,00';
+        document.getElementById('deposito').innerText = 'R$ 0,00';
+    }
+</script>
+
+</body>
+</html>
