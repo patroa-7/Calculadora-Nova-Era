@@ -2,100 +2,199 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora Nova Era</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Nova Era Pro</title>
     <style>
+        :root {
+            --vermelho-neon: #ff0000;
+            --vermelho-escuro: #8b0000;
+            --branco: #ffffff;
+            --preto-puro: #000000;
+            --cinza-escuro: #121212;
+        }
+
         body {
-            background-color: #1a1a1a;
-            color: white;
-            font-family: sans-serif;
+            background-color: var(--preto-puro);
+            color: var(--branco);
+            font-family: 'Segoe UI', Roboto, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
-        .container {
-            background: #252525;
-            padding: 30px;
-            border-radius: 25px;
-            border: 3px solid #e63946;
+
+        .calc-card {
+            background-color: var(--cinza-escuro);
+            width: 360px;
+            padding: 40px;
+            border-radius: 30px;
+            border: 2px solid var(--vermelho-neon);
             text-align: center;
-            width: 320px;
-            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+            position: relative;
         }
-        h1 { color: #e63946; font-size: 1.5rem; margin-bottom: 20px; }
-        .valor-principal { font-size: 2rem; font-weight: bold; margin-bottom: 20px; color: #fff; }
-        .linha {
+
+        .header-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .total-display {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--branco);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px var(--vermelho-neon);
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--vermelho-neon), transparent);
+            margin: 20px 0;
+        }
+
+        .result-group {
+            margin-bottom: 30px;
+        }
+
+        .row {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #333;
+            align-items: center;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #222;
         }
-        .vermelho { color: #e63946; font-weight: bold; }
-        input {
+
+        .label { font-weight: 500; color: #ccc; }
+        .val { color: var(--vermelho-neon); font-weight: bold; font-size: 1.2rem; }
+
+        .input-box {
             width: 100%;
-            padding: 12px;
-            margin: 20px 0 10px;
-            border-radius: 10px;
-            border: none;
+            padding: 15px;
+            background: #080808;
+            border: 1px solid #333;
+            border-radius: 15px;
+            color: var(--branco);
+            font-size: 1.2rem;
             text-align: center;
-            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
         }
-        .btn-group { display: flex; gap: 10px; }
+
+        .input-box:focus {
+            border-color: var(--vermelho-neon);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
         button {
             flex: 1;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 15px;
             border: none;
-            cursor: pointer;
-            font-weight: bold;
+            font-weight: 800;
             text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .btn-calc { background: #e63946; color: white; }
-        .btn-zero { background: white; color: #1a1a1a; }
+
+        .btn-calc {
+            background: linear-gradient(45deg, var(--vermelho-escuro), var(--vermelho-neon));
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .btn-clear {
+            background: var(--branco);
+            color: var(--preto-puro);
+        }
+
+        .btn-clear:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: var(--vermelho-neon);
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🐺 NOVA ERA 🐺</h1>
-    <div id="total" class="valor-principal">R$ 0,00</div>
-    
-    <div class="linha">
-        <span>Cliente (85%)</span>
-        <span id="cliente" class="vermelho">R$ 0,00</span>
-    </div>
-    <div class="linha">
-        <span>Depósito (15%)</span>
-        <span id="deposito" class="vermelho">R$ 0,00</span>
+<div class="calc-card">
+    <div class="header-title">Total da Venda</div>
+    <div class="total-display" id="main-total">R$ 0,00</div>
+
+    <div class="divider"></div>
+
+    <div class="result-group">
+        <div class="row">
+            <span class="label">🐺 Cliente (85%)</span>
+            <span class="val" id="res-cliente">R$ 0,00</span>
+        </div>
+        <div class="row" style="border:none">
+            <span class="label">🔺 Depósito (15%)</span>
+            <span class="val" id="res-deposito">R$ 0,00</span>
+        </div>
     </div>
 
-    <input type="number" id="entrada" placeholder="Digite o valor da venda">
-    
-    <div class="btn-group">
+    <input type="number" id="input-val" class="input-box" placeholder="0,00">
+
+    <div class="btn-container">
         <button class="btn-calc" onclick="calcular()">Calcular</button>
-        <button class="btn-zero" onclick="limpar()">Zerar</button>
+        <button class="btn-clear" onclick="limpar()">Zerar</button>
     </div>
+
+    <div class="footer">🔺 NOVA ERA 🔺</div>
 </div>
 
 <script>
-    function formatar(n) {
-        return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const input = document.getElementById('input-val');
+    const totalDisp = document.getElementById('main-total');
+    const clienteDisp = document.getElementById('res-cliente');
+    const depositoDisp = document.getElementById('res-deposito');
+
+    function format(v) {
+        return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
     function calcular() {
-        let v = parseFloat(document.getElementById('entrada').value) || 0;
-        document.getElementById('total').innerText = formatar(v);
-        document.getElementById('cliente').innerText = formatar(v * 0.85);
-        document.getElementById('deposito').innerText = formatar(v * 0.15);
+        const v = parseFloat(input.value) || 0;
+        totalDisp.innerText = format(v);
+        clienteDisp.innerText = format(v * 0.85);
+        depositoDisp.innerText = format(v * 0.15);
     }
 
     function limpar() {
-        document.getElementById('entrada').value = '';
-        document.getElementById('total').innerText = 'R$ 0,00';
-        document.getElementById('cliente').innerText = 'R$ 0,00';
-        document.getElementById('deposito').innerText = 'R$ 0,00';
+        input.value = '';
+        totalDisp.innerText = 'R$ 0,00';
+        clienteDisp.innerText = 'R$ 0,00';
+        depositoDisp.innerText = 'R$ 0,00';
     }
+
+    input.addEventListener("keypress", (e) => { if(e.key === "Enter") calcular(); });
 </script>
 
 </body>
