@@ -113,4 +113,90 @@
         .btn-calc {
             background: linear-gradient(45deg, var(--vermelho-escuro), var(--vermelho-neon));
             color: white;
-            box-shadow: 0 4px 15px rgba(255,
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .btn-clear {
+            background: var(--branco);
+            color: var(--preto-puro);
+        }
+
+        .btn-clear:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: var(--vermelho-neon);
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calc-card">
+    <div class="header-title">Total da Venda</div>
+    <div class="total-display" id="main-total">R$ 0</div>
+
+    <div class="divider"></div>
+
+    <div class="result-group">
+        <div class="row">
+            <span class="label">🐺 Cliente (85%)</span>
+            <span class="val" id="res-cliente">R$ 0</span>
+        </div>
+        <div class="row" style="border:none">
+            <span class="label">🐺 Depósito (15%)</span>
+            <span class="val" id="res-deposito">R$ 0</span>
+        </div>
+    </div>
+
+    <input type="number" id="input-val" class="input-box" placeholder="0">
+
+    <div class="btn-container">
+        <button class="btn-calc" onclick="calcular()">Calcular</button>
+        <button class="btn-clear" onclick="limpar()">Zerar</button>
+    </div>
+
+    <div class="footer">❤️ NOVA ERA ❤️</div>
+</div>
+
+<script>
+    const input = document.getElementById('input-val');
+    const totalDisp = document.getElementById('main-total');
+    const clienteDisp = document.getElementById('res-cliente');
+    const depositoDisp = document.getElementById('res-deposito');
+
+    // Função alterada para remover as casas decimais (,00)
+    function format(v) {
+        return 'R$ ' + Math.floor(v).toLocaleString('pt-BR');
+    }
+
+    function calcular() {
+        const v = parseFloat(input.value) || 0;
+        totalDisp.innerText = format(v);
+        clienteDisp.innerText = format(v * 0.85);
+        depositoDisp.innerText = format(v * 0.15);
+    }
+
+    function limpar() {
+        input.value = '';
+        totalDisp.innerText = 'R$ 0';
+        clienteDisp.innerText = 'R$ 0';
+        depositoDisp.innerText = 'R$ 0';
+    }
+
+    input.addEventListener("keypress", (e) => { if(e.key === "Enter") calcular(); });
+</script>
+
+</body>
+</html>
