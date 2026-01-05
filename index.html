@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Nova Era Pro</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/HL5BNV61/imagem-2026-01-05-044420145.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -25,11 +26,11 @@
 
         body {
             background-color: var(--preto-puro);
-            /* Link da imagem corrigido */
             background-image: url('https://i.ibb.co/HL5BNV61/imagem-2026-01-05-044420145.png'); 
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-position: center center; /* CENTRALIZA O 7 */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* FUNDO PARADO */
             color: var(--branco);
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; margin: 0;
@@ -107,15 +108,13 @@
             outline: none; margin-top: 15px; font-weight: 700;
         }
 
-        /* REMOVE AS SETINHAS DO CAMPO DE NÚMERO */
+        /* REMOVE AS SETINHAS */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+        input[type=number] { -moz-appearance: textfield; }
 
         .btn-container { display: flex; gap: 12px; margin-top: 25px; }
         .btn-calc { flex: 1; padding: 18px; border-radius: 15px; background: linear-gradient(45deg, var(--vermelho-escuro), var(--vermelho-neon)); color: white; border: none; font-weight: 700; cursor: pointer; font-size: 1rem; }
@@ -134,7 +133,7 @@
     <div id="tela-menu" class="tela ativa">
         <div class="header-title">SISTEMA</div>
         <h1>NOVA ERA</h1>
-        <button class="btn-menu" onclick="mudarTela('tela-attachs')">🛒 VENDA DE PRODUTOS</button>
+        <button class="btn-menu" onclick="mudarTela('tela-attachs')">🛒 VENDA DE ITENS</button>
         <button class="btn-menu" onclick="mudarTela('tela-lavagem')">💷 LAVAGEM</button>
     </div>
 
