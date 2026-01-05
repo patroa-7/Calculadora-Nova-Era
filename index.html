@@ -28,9 +28,9 @@
             background-color: var(--preto-puro);
             background-image: url('https://i.ibb.co/HL5BNV61/imagem-2026-01-05-044420145.png'); 
             background-size: cover;
-            background-position: center center; /* CENTRALIZA O 7 */
+            background-position: center center;
             background-repeat: no-repeat;
-            background-attachment: fixed; /* FUNDO PARADO */
+            background-attachment: fixed;
             color: var(--branco);
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; margin: 0;
@@ -108,7 +108,6 @@
             outline: none; margin-top: 15px; font-weight: 700;
         }
 
-        /* REMOVE AS SETINHAS */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -141,8 +140,8 @@
         <div class="header-title">TOTAL DO PEDIDO</div>
         <div class="total-display" id="total-att">R$ 0</div>
         <div class="abas">
-            <button id="tab-sim" class="aba ativa" onclick="mudarParceria(true)">COM PARCERIA</button>
-            <button id="tab-nao" class="aba" onclick="mudarParceria(false)">SEM PARCERIA</button>
+            <button id="tab-nao" class="aba ativa" onclick="mudarParceria(false)">SEM PARCERIA</button>
+            <button id="tab-sim" class="aba" onclick="mudarParceria(true)">COM PARCERIA</button>
         </div>
         <div class="lista" id="lista-corpo"></div>
         <div class="btn-container">
@@ -184,7 +183,7 @@
         { id: 'tic', nome: 'TICKET DE CORRIDA', p1: 5000, p2: 6000 }
     ];
     let qtds = { c4:0, lan:0, sil:0, pen:0, emp:0, mir:0, tic:0 };
-    let parceria = true;
+    let parceria = false; // COMEÇA EM SEM PARCERIA
 
     function format(v) { return 'R$ ' + Math.floor(v).toLocaleString('pt-BR'); }
     function mudarTela(id) {
@@ -219,7 +218,4 @@
 </script>
 
 </body>
-
 </html>
-
-
