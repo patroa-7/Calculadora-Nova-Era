@@ -4,198 +4,219 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Nova Era Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --vermelho-neon: #ff0000;
             --vermelho-escuro: #8b0000;
             --branco: #ffffff;
             --preto-puro: #000000;
-            --cinza-escuro: #121212;
+            --cinza-escuro: #0d0d0d;
+        }
+
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Rajdhani', sans-serif !important; 
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         body {
             background-color: var(--preto-puro);
+            /* Link da imagem corrigido */
+            background-image: url('https://i.ibb.co/HL5BNV61/imagem-2026-01-05-044420145.png'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: var(--branco);
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0;
+            overflow: hidden; 
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); 
+            z-index: 0;
         }
 
         .calc-card {
-            background-color: var(--cinza-escuro);
-            width: 360px;
-            padding: 40px;
-            border-radius: 30px;
+            background-color: rgba(13, 13, 13, 0.9);
+            width: 100%; max-width: 380px;
+            padding: 40px; border-radius: 30px;
             border: 2px solid var(--vermelho-neon);
             text-align: center;
             box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
             position: relative;
+            z-index: 1;
+            backdrop-filter: blur(8px);
         }
 
-        .header-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #888;
-            margin-bottom: 10px;
+        .tela { display: none; }
+        .ativa { display: block; }
+
+        .header-title { 
+            font-family: 'Orbitron', sans-serif !important;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: #888; margin-bottom: 10px; 
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif !important;
+            font-size: 2.2rem; margin-bottom: 30px; letter-spacing: 4px; font-weight: 900;
+            text-shadow: 0 0 10px var(--vermelho-neon);
         }
 
-        .total-display {
-            font-size: 2.8rem;
-            font-weight: 900;
-            color: var(--branco);
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px var(--vermelho-neon);
+        .total-display { 
+            font-family: 'Rajdhani', sans-serif !important;
+            font-size: 3.5rem; font-weight: 700; margin-bottom: 25px; 
+            text-shadow: 0 0 15px var(--vermelho-neon); line-height: 1;
         }
 
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--vermelho-neon), transparent);
-            margin: 20px 0;
+        .btn-menu {
+            width: 100%; padding: 22px; margin: 12px 0;
+            background: #151515; border: 1px solid #333;
+            color: white; border-radius: 15px; cursor: pointer;
+            font-size: 1rem; transition: 0.3s;
+            text-transform: uppercase; font-weight: 700;
+        }
+        .btn-menu:hover { border-color: var(--vermelho-neon); background: #1a1a1a; transform: scale(1.02); }
+
+        .abas { display: flex; background: #000; border-radius: 10px; padding: 5px; margin-bottom: 20px; }
+        .aba { flex: 1; padding: 10px; border: none; background: transparent; color: #555; cursor: pointer; font-weight: 700; border-radius: 7px; font-size: 0.8rem; }
+        .aba.ativa { background: var(--vermelho-neon); color: white; }
+
+        .lista { max-height: 250px; overflow-y: scroll; margin-bottom: 20px; text-align: left; }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #222; }
+        .item-info b { display: block; font-size: 0.9rem; }
+        .item-info span { color: var(--vermelho-neon); font-size: 1rem; font-weight: 700; }
+        
+        .controles { display: flex; align-items: center; gap: 10px; }
+        .btn-qtd { width: 30px; height: 30px; border: none; background: #222; color: white; border-radius: 5px; cursor: pointer; font-weight: 700; font-size: 1.2rem; }
+
+        .row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 1rem; }
+        .val { color: var(--vermelho-neon); font-weight: 700; font-size: 1.1rem; }
+        
+        .input-box { 
+            width: 100%; padding: 15px; background: #080808; 
+            border: 1px solid #333; border-radius: 15px; 
+            color: white; text-align: center; font-size: 2rem; 
+            outline: none; margin-top: 15px; font-weight: 700;
         }
 
-        .result-group {
-            margin-bottom: 30px;
+        /* REMOVE AS SETINHAS DO CAMPO DE NÚMERO */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
         }
 
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #222;
-        }
+        .btn-container { display: flex; gap: 12px; margin-top: 25px; }
+        .btn-calc { flex: 1; padding: 18px; border-radius: 15px; background: linear-gradient(45deg, var(--vermelho-escuro), var(--vermelho-neon)); color: white; border: none; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .btn-clear { flex: 1; padding: 18px; border-radius: 15px; background: var(--branco); color: var(--preto-puro); border: none; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .btn-voltar { display: block; width: 100%; margin-top: 20px; background: transparent; color: #444; font-size: 0.8rem; text-decoration: underline; border: none; cursor: pointer; }
 
-        .label { font-weight: 500; color: #ccc; }
-        .val { color: var(--vermelho-neon); font-weight: bold; font-size: 1.2rem; }
-
-        .input-box {
-            width: 100%;
-            padding: 15px;
-            background: #080808;
-            border: 1px solid #333;
-            border-radius: 15px;
-            color: var(--branco);
-            font-size: 1.2rem;
-            text-align: center;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box;
-        }
-
-        .input-box:focus {
-            border-color: var(--vermelho-neon);
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
-        }
-
-        .btn-container {
-            display: flex;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        button {
-            flex: 1;
-            padding: 15px;
-            border-radius: 15px;
-            border: none;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-calc {
-            background: linear-gradient(45deg, var(--vermelho-escuro), var(--vermelho-neon));
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-        }
-
-        .btn-calc:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
-        }
-
-        .btn-clear {
-            background: var(--branco);
-            color: var(--preto-puro);
-        }
-
-        .btn-clear:hover {
-            background: #e0e0e0;
-            transform: translateY(-2px);
-        }
-
-        .footer {
-            margin-top: 30px;
-            font-size: 12px;
-            color: var(--vermelho-neon);
-            font-weight: bold;
-            letter-spacing: 2px;
-            opacity: 0.7;
+        .footer { 
+            font-family: 'Orbitron', sans-serif !important;
+            margin-top: 30px; font-size: 11px; color: var(--vermelho-neon); font-weight: 900; letter-spacing: 2px; opacity: 0.6; 
         }
     </style>
 </head>
 <body>
 
 <div class="calc-card">
-    <div class="header-title">Total da Venda</div>
-    <div class="total-display" id="main-total">R$ 0</div>
+    <div id="tela-menu" class="tela ativa">
+        <div class="header-title">SISTEMA</div>
+        <h1>NOVA ERA</h1>
+        <button class="btn-menu" onclick="mudarTela('tela-attachs')">🛒 VENDA DE PRODUTOS</button>
+        <button class="btn-menu" onclick="mudarTela('tela-lavagem')">💷 LAVAGEM</button>
+    </div>
 
-    <div class="divider"></div>
+    <div id="tela-attachs" class="tela">
+        <div class="header-title">TOTAL DO PEDIDO</div>
+        <div class="total-display" id="total-att">R$ 0</div>
+        <div class="abas">
+            <button id="tab-sim" class="aba ativa" onclick="mudarParceria(true)">COM PARCERIA</button>
+            <button id="tab-nao" class="aba" onclick="mudarParceria(false)">SEM PARCERIA</button>
+        </div>
+        <div class="lista" id="lista-corpo"></div>
+        <div class="btn-container">
+            <button class="btn-clear" style="width: 100%;" onclick="zerarAtt()">LIMPAR TUDO</button>
+        </div>
+        <button class="btn-voltar" onclick="mudarTela('tela-menu')">VOLTAR AO MENU</button>
+    </div>
 
-    <div class="result-group">
+    <div id="tela-lavagem" class="tela">
+        <div class="header-title">TOTAL DA VENDA</div>
+        <div class="total-display" id="main-total">R$ 0</div>
         <div class="row">
-            <span class="label">🐺 Cliente (85%)</span>
+            <span>🐺 CLIENTE (85%)</span>
             <span class="val" id="res-cliente">R$ 0</span>
         </div>
         <div class="row" style="border:none">
-            <span class="label">🐺 Depósito (15%)</span>
+            <span>🐺 DEPÓSITO (15%)</span>
             <span class="val" id="res-deposito">R$ 0</span>
         </div>
+        <input type="number" id="input-val" class="input-box" placeholder="0">
+        <div class="btn-container">
+            <button class="btn-calc" onclick="calcularLavagem()">CALCULAR</button>
+            <button class="btn-clear" onclick="limparLavagem()">ZERAR</button>
+        </div>
+        <button class="btn-voltar" onclick="mudarTela('tela-menu')">VOLTAR AO MENU</button>
     </div>
 
-    <input type="number" id="input-val" class="input-box" placeholder="0">
-
-    <div class="btn-container">
-        <button class="btn-calc" onclick="calcular()">Calcular</button>
-        <button class="btn-clear" onclick="limpar()">Zerar</button>
-    </div>
-
-    <div class="footer">❤️ NOVA ERA ❤️</div>
+    <div class="footer">NOVA ERA</div>
 </div>
 
 <script>
-    const input = document.getElementById('input-val');
-    const totalDisp = document.getElementById('main-total');
-    const clienteDisp = document.getElementById('res-cliente');
-    const depositoDisp = document.getElementById('res-deposito');
+    const db = [
+        { id: 'c4', nome: 'C4 EXPLOSIVE', p1: 3000, p2: 4000 },
+        { id: 'lan', nome: 'LANTERNA', p1: 500, p2: 600 },
+        { id: 'sil', nome: 'SILENCIADOR', p1: 500, p2: 600 },
+        { id: 'pen', nome: 'PENTE ESTENDIDO', p1: 500, p2: 600 },
+        { id: 'emp', nome: 'EMPUNHADURA', p1: 500, p2: 600 },
+        { id: 'mir', nome: 'MIRA HOLOGRÁFICA', p1: 500, p2: 600 },
+        { id: 'tic', nome: 'TICKET DE CORRIDA', p1: 5000, p2: 6000 }
+    ];
+    let qtds = { c4:0, lan:0, sil:0, pen:0, emp:0, mir:0, tic:0 };
+    let parceria = true;
 
-    // Função alterada para remover as casas decimais (,00)
-    function format(v) {
-        return 'R$ ' + Math.floor(v).toLocaleString('pt-BR');
+    function format(v) { return 'R$ ' + Math.floor(v).toLocaleString('pt-BR'); }
+    function mudarTela(id) {
+        document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+        document.getElementById(id).classList.add('ativa');
     }
-
-    function calcular() {
-        const v = parseFloat(input.value) || 0;
-        totalDisp.innerText = format(v);
-        clienteDisp.innerText = format(v * 0.85);
-        depositoDisp.innerText = format(v * 0.15);
+    function render() {
+        let total = 0;
+        document.getElementById('lista-corpo').innerHTML = db.map(item => {
+            const preco = parceria ? item.p1 : item.p2;
+            total += preco * qtds[item.id];
+            return `<div class="item"><div class="item-info"><b>${item.nome}</b><span>${format(preco)}</span></div><div class="controles"><button class="btn-qtd" onclick="alt('${item.id}', -1)">-</button><b style="width:25px; text-align:center; font-size:1.1rem;">${qtds[item.id]}</b><button class="btn-qtd" onclick="alt('${item.id}', 1)">+</button></div></div>`;
+        }).join('');
+        document.getElementById('total-att').innerText = format(total);
     }
-
-    function limpar() {
-        input.value = '';
-        totalDisp.innerText = 'R$ 0';
-        clienteDisp.innerText = 'R$ 0';
-        depositoDisp.innerText = 'R$ 0';
+    function alt(id, v) { qtds[id] = Math.max(0, qtds[id] + v); render(); }
+    function mudarParceria(v) { parceria = v; document.getElementById('tab-sim').className = v ? 'aba ativa' : 'aba'; document.getElementById('tab-nao').className = !v ? 'aba ativa' : 'aba'; render(); }
+    function zerarAtt() { for(let k in qtds) qtds[k]=0; render(); }
+    function calcularLavagem() {
+        const val = parseFloat(document.getElementById('input-val').value) || 0;
+        document.getElementById('main-total').innerText = format(val);
+        document.getElementById('res-cliente').innerText = format(val * 0.85);
+        document.getElementById('res-deposito').innerText = format(val * 0.15);
     }
-
-    input.addEventListener("keypress", (e) => { if(e.key === "Enter") calcular(); });
+    function limparLavagem() {
+        document.getElementById('input-val').value = '';
+        document.getElementById('main-total').innerText = 'R$ 0';
+        document.getElementById('res-cliente').innerText = 'R$ 0';
+        document.getElementById('res-deposito').innerText = 'R$ 0';
+    }
+    render();
 </script>
 
 </body>
